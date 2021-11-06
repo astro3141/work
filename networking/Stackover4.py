@@ -1,8 +1,13 @@
 
 class Stackover4():
-    
-    host=None
-    port=None
+
+    header={}
+    #headerSequence only input list [headername, type, length]
+    headerSequence=[]
+    payload=''
+
+    flag={}
+    flagSequence=[]
     
     @staticmethod
     def inttobit(integer, weight):
@@ -37,7 +42,7 @@ class Stackover4():
                 
         return ''.join(result)
 
-
+        
     @staticmethod
     def bittobyte(bits):
         
@@ -75,22 +80,104 @@ class Stackover4():
         return resultBytes
 
 
-    @abstractmethod
-    def __init__(self,host,port):
+    def __init__(self):
         pass
 
-    @abstractmethod
-    def connect(self):
+
+    def setheaderSequenceOnce(self,**kwargs):
         pass
 
-    @abstractmethod
-    def send(self):
+
+    def setheaderSequenceReculsive(self):
+        name = input("type header name(if flag type flag)\n")
+        types = input("type value't type(int,str,flg)\n")
+        length = input("tpye header's length\n")
+        if name != "":
+            self.headerSequence.append([name,types,length])
+            self.setheaderSequenceReculsive()
+
+    def setHeader(self,name,value):
+        if hasHeader:
+            self.header[name] = value
+        else:
+            raise Exception("doesn't have header, you must regist header by setheaderSequenceOnce or setheaderSequenceReculsive")
+
+
+    def setHeaderAuto(self):
+        for i in self.headerSequence:
+            value = input("input %s's value(type is %s and length is %d)\n"%(i[0],i[1],i[2]))
+            self.setHeader(i[0],value)
+
+    def setPayload(self):
+        #abstrac after
+        name = input("type query's name\n")
+        types = input("type query's type\n")
+        classes = input("type query's class\n")
+        name = name.split(".")
+        for i in name:
+            if len(i)>63:
+                raise Exception("query name is so long")
+            self.inttobit(len(i),1)
+
+
+    def setflagSequenceOnce(self):
         pass
 
+
+    def setflagSequenceReculsive(self):
+        name = input("type flag name\n")
+        ranges = input("tpye flag's range(0 ~ n-1)\n")
+        if name != "":
+            self.flagSequence.append([name,ranges])
+            self.setflagSequenceReculsive()
+
+
+    def setFlag(self,name,value):
+        ranges = checkFlag
+        if ranges:
+            self.flag[name] = value
+        else:
+            raise Exception("doesn't have flag or not match range, you must regist flag by setflagSequenceOnce or setflagSequenceReculsive")
+
+
+    def setFlagAuto(self):
+        for i in self.flagSequence:
+            value = input("input %s's value(range is %s)\n"%(i[0],i[1]))
+            self.setFlag(i[0],value)
+                  
+
+    def checkFlag(self,name):
+        for i in self.flagSequence:
+            if i[0] == name:
+                return i[1]
+            else:
+                return False
+
+    def hasFlag(self,name):
+        for i in self.flagSequence:
+            if i[0] == name:
+                return True
+        return False
     
+
+    def checkHeader(self,name):
+        for i in self.headerSequence:
+            if i[0] == name:
+                return i
+        return False
+
+
+    def hasHeader(self,name):
+        for i in self.headerSequence:
+            if i[0] == name:
+                return True
+        return False
         
             
-            
+dns = Stackover4()
+dns.setheaderSequenceReculsive()
+dns.setflagSequenceReculsive()
+
             
 """            
 def bittobyte(bits):
